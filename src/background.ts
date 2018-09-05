@@ -6,18 +6,14 @@ browser.webNavigation.onCommitted.addListener(details => {
     
     if(details.transitionType === "auto_subframe") return;
 
-    // TODO: set badge text and icon based on api response
     let api = new HoaxlyApi();
 
     api.check(details.url).then(response => {
 
-        // TODO: is this a good idea?
-        // calculating the average of normalizedAlternateName?
-        // /...Name/ does not sould like a number!
         let rating = 0, ratingCnt = 0, ratingText = '-';
-        if(response.reviews) response.reviews.forEach(rev => {
-            if(rev.reviewRating && rev.reviewRating.ratingValue){
-                rating += rev.reviewRating.ratingValue;
+        if(response.data && response.data.reviews) response.data.reviews.forEach(rev => {
+            if(rev.ratings && rev.ratings.ratingValue != undefined){
+                rating += rev.ratings.ratingValue;
                 ratingCnt++;
             }
         });
